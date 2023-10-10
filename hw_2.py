@@ -16,7 +16,7 @@ def l_kn(x_k, x_):
 def lagrange_polynom(n_, x_):
     ans = 0
     for x_k in selected_nodes[:n_+1]:
-        ans += l_kn(x_k, x_) * f(x_k)
+        ans += l_kn(x_k, x_) * all_nodes_table_dict[x_k]
     return ans
 
 
@@ -79,32 +79,34 @@ def print_table(rows_list):
     print(table)
 
 
+print('Задача алгебраического интерполирования')
+print('Вариант 1')
+print('Используются равноотстоящие узлы')
+a, b = map(float, input('Введите через пробел начало и конец отрезка:').split())
+m = int(input('Введите m, где m+1 - число значений в таблице:'))
+
+h = (b - a)/m
+nodes = [a + i*h for i in range(m + 1)]
+all_nodes_table_dict = {x: f(x) for x in nodes}
+print("Исходная таблица узел-значение")
+print_table(nodes)
+
 while True:
-    print('Задача алгебраического интерполирования')
-    print('Вариант 1')
-    print('Используются равноотстоящие узлы')
-    a, b = map(int, input('Введите через пробел начало и конец отрезка:').split())
-    m = int(input('Введите m, где m+1 - число значений в таблице:'))
-    n = m + 1
+    n = int(input(f'Введите n - максимальную степень интерполяционного многочлена, n<={m}:'))
     while n > m:
-        n = int(input('Введите n - степень интерполяционного многочлена, n<m:'))
+        print('Некорректное значение n!')
+        n = int(input(f'Введите n - максимальную степень интерполяционного многочлена, n<={m}:'))
+
     x = float(input('Введите, в какой точке посчитать функцию:'))
-    h = (b - a)/m
-    nodes = [a + i*h for i in range(m + 1)]
-    all_nodes_table_dict = {x: f(x) for x in nodes}
-
-    print("Исходная таблица узел-значение")
-    print_table(nodes)
-
     selected_nodes = get_nodes_we_need(x, n)
     print("Отсортированная в порядке отдаления от x таблица узел-значение")
     print_table(selected_nodes)
     L_x = lagrange_polynom(n, x)
     print(f'Значение полинома Лагранжа L(x) в точке х = {x}:', L_x)
-    print('|f(x)-L(x)| =', abs(f(x) - L_x))
+    print('Абсолютная фактическая погрешность |f(x)-L(x)| =', abs(f(x) - L_x))
     P_x = newton_polynom(n, x)
     print(f'Значение полинома Ньютона P(x) в точке х = {x}:', P_x)
-    print('|f(x)-P(x)| =', abs(f(x) - P_x))
+    print('Абсолютная фактическая погрешность |f(x)-P(x)| =', abs(f(x) - P_x))
     flag = input('Хотите ввести новые значения? (y/n):')
     if flag == 'n':
         break
