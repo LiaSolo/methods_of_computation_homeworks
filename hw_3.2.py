@@ -45,8 +45,10 @@ def print_result_table():
 def df_for_center(i):
     x_plus = nodes[i + 1]
     x_minus = nodes[i - 1]
+    f_plus = all_nodes_table_dict[x_plus]
+    f_minus = all_nodes_table_dict[x_minus]
     # print('center', x_minus, x_plus)
-    return (all_nodes_table_dict[x_plus] - all_nodes_table_dict[x_minus]) / (2 * h)
+    return (f_plus - f_minus) / (2 * h)
 
 
 def df_for_first():
@@ -76,15 +78,18 @@ def ddf_for_center(i):
     f_x = all_nodes_table_dict[x]
     f_x_minus = all_nodes_table_dict[x_minus]
     f_x_plus = all_nodes_table_dict[x_plus]
-    print(i, x_plus, x, x_minus)
+    # print(i, x_plus, x, x_minus)
     return (f_x_plus - 2*f_x + f_x_minus) / h**2
 
 
+print('Задача численного дифференцирования')
+print('Вариант 1')
+print('Функция: exp(1.5*x)')
 while True:
 
     a = float(input('Введите начало отрезка: '))
     h = float(input('Укажите, с каким шагом узлы будут отстоять друг от друга: '))
-    m = int(input('Введите m, где m+1 - число значений в таблице'))
+    m = int(input('Введите m, где m+1 - число значений в таблице: '))
 
     # a = 1
     # h = 10**(-11)
@@ -113,8 +118,9 @@ while True:
         ddf_dict[x] = ddf_for_center(i)
     ddf_dict[nodes[-1]] = '-'
 
+    print("Результирующая таблица узел-значение")
     print_result_table()
 
-    flag = input('Хотите ввести новые значения? (y/n):')
+    flag = input('Хотите ввести новые значения? (y/n): ')
     if flag == 'n':
         break
